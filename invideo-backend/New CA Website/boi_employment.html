@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOI Business/Employment Verification Form</title>
+
+<!-- Latest jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+<style>
+body { font-family: Arial, sans-serif; margin: 10px; padding: 0; }
+form { max-width: 100%; }
+label { font-weight: bold; display: block; margin-top: 10px; }
+input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; margin-bottom: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+input.error { border-color: red; }
+.ref-row { display: flex; gap: 10px; }
+.ref-row input { flex: 1; }
+button { background-color: #2c3e50; color: #fff; padding: 10px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; }
+button:hover { background-color: #1a242f; }
+</style>
+</head>
+<body>
+
+<h2>Bank of India - Business/Employment Verification Form</h2>
+<form id="bizForm">
+
+<label>Applicant Name:</label>
+<input type="text" id="applicant_name">
+
+<label>Name of the Business Firm/Employer:</label>
+<input type="text" id="biz_name">
+
+<label>Address of the Business Firm/Employer:</label>
+<input type="text" id="biz_address">
+
+<label>Ownership of Office/Shop/Factory:</label>
+<select id="ownership" onchange="toggleOther('ownership','ownership_other')">
+  <option>Owned</option>
+  <option>Rented</option>
+  <option>Leased</option>
+  <option>Company Premises</option>
+  <option>Other</option>
+</select>
+<input type="text" id="ownership_other" placeholder="Specify Ownership" style="display:none; margin-top:5px;">
+
+<label>Whether Name Board of Firm/Office sighted?</label>
+<select id="board_sighted">
+  <option>Yes</option>
+  <option>No</option>
+</select>
+
+<label>If No, Comments thereof:</label>
+<input type="text" id="comments">
+
+<label>Designation:</label>
+<select id="designation" onchange="toggleOther('designation','designation_other')">
+  <option>Owner</option>
+  <option>Partner</option>
+  <option>Employee</option>
+  <option>Other</option>
+</select>
+<input type="text" id="designation_other" placeholder="Specify Designation" style="display:none; margin-top:5px;">
+
+<label>If Employed, Since when & Employee No. / If Self-employed, Since when:</label>
+<input type="text" id="year_est">
+
+<label>Type of Employer/Business Firm:</label>
+<select id="biz_type" onchange="toggleOther('biz_type','biz_type_other')">
+  <option>Private</option>
+  <option>Public</option>
+  <option>Government</option>
+  <option>Partnership</option>
+  <option>Proprietorship</option>
+  <option>Other</option>
+</select>
+<input type="text" id="biz_type_other" placeholder="Specify Employer Type" style="display:none; margin-top:5px;">
+
+<label style="margin-top:15px;">Reference Details (Mandatory)</label>
+<b>1. Reference Name & Number</b>
+<div class="ref-row">
+  <input type="text" id="ref1_name" placeholder="Name">
+  <input type="text" id="ref1_number" placeholder="Number">
+</div>
+<div id="ref1_error" class="error" style="display:none; color:red;">Reference 1 Name & Number is mandatory.</div>
+
+<b>2. Reference Name & Number</b>
+<div class="ref-row">
+  <input type="text" id="ref2_name" placeholder="Name">
+  <input type="text" id="ref2_number" placeholder="Number">
+</div>
+<div id="ref2_error" class="error" style="display:none; color:red;">Reference 2 Name & Number is mandatory.</div>
+
+<label>Name of Verifier & Remarks:</label>
+<input type="text" id="verifier" placeholder="Type Verifier Name">
+<small>Or choose below (optional)</small>
+<select id="verifier_select" onchange="applyVerifierSelect()">
+  <option value="">Select Verifier Name (optional)</option>
+  <option>Dheeraj</option>
+  <option>Sumit</option>
+  <option>Varun Michael</option>
+  <option>Pankaj Dixit</option>
+  <option>Rohit</option>
+  <option>Ravi</option>
+  <option>Sunil</option>
+  <option>Rakesh</option>
+  <option>Bittoo Rajput</option>
+  <option>Ajay Sharma</option>
+  <option>Badan Singh</option>
+  <option>Amit Kumar</option>
+</select>
+
+<label>Additional Remarks / Notes:</label>
+<textarea id="remarks" rows="4" cols="50"></textarea>
+
+<button type="button" onclick="generatePDF()">Download BOI Business/Employment Verification PDF</button>
+</form>
+
+<script>
+function toggleOther(selectId, inputId) {
+    const select = document.getElementById(selectId);
+    const input = document.getElementById(inputId);
+    input.style.display = select.value === "Other" ? "block" : "none";
+}
+
+function applyVerifierSelect() {
+    const input = document.getElementById("verifier");
+    const selectVal = document.getElementById("verifier_select").value;
+    if (!input.value && selectVal) input.value = selectVal;
+}
+
+function getIndiaDate() {
+    return new Date().toLocaleDateString("en-IN", { day:"2-digit", month:"2-digit", year:"numeric" });
+}
+
+function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Reference Validation
+    const ref1Name = document.getElementById("ref1_name").value.trim();
+    const ref1Number = document.getElementById("ref1_number").value.trim();
+    const ref2Name = document.getElementById("ref2_name").value.trim();
+    const ref2Number = document.getElementById("ref2_number").value.trim();
+
+    let valid = true;
+    if(!ref1Name || !ref1Number){ document.getElementById("ref1_error").style.display="block"; valid=false;} else {document.getElementById("ref1_error").style.display="none";}
+    if(!ref2Name || !ref2Number){ document.getElementById("ref2_error").style.display="block"; valid=false;} else {document.getElementById("ref2_error").style.display="none";}
+    if(!valid) return;
+
+    // Header
+    doc.setFillColor(44,62,80);
+    doc.rect(0,0,210,25,"F");
+    doc.setTextColor(255,255,255);
+    doc.setFont("times","bold");
+    doc.setFontSize(16);
+    doc.text("Samiksha Garg & Associates",105,12,{align:"center"});
+    doc.setFont("times","normal");
+    doc.setFontSize(10);
+    doc.text("BS 4L, Malibu Town, Sector-47, Gurugram, HR-1220018",205,20,{align:"right"});
+    doc.setTextColor(0,0,0);
+
+    const applicantName = document.getElementById("applicant_name").value.trim() || "Applicant";
+
+    doc.setFont("times","bold"); doc.setFontSize(12);
+    doc.text("Applicant Name: ",14,35);
+    doc.setFont("times","normal"); doc.text(applicantName,60,35);
+
+    doc.setLineWidth(0.3);
+    doc.line(10,40,200,40);
+
+    const visitDate = getIndiaDate();
+
+    let ownership = document.getElementById("ownership").value;
+    if(ownership==="Other") ownership += " ("+document.getElementById("ownership_other").value+")";
+
+    let designation = document.getElementById("designation").value;
+    if(designation==="Other") designation += " ("+document.getElementById("designation_other").value+")";
+
+    let bizType = document.getElementById("biz_type").value;
+    if(bizType==="Other") bizType += " ("+document.getElementById("biz_type_other").value+")";
+
+    let verifierVal = document.getElementById("verifier").value.trim();
+    const verifierSelectVal = document.getElementById("verifier_select").value;
+    if(!verifierVal && verifierSelectVal) verifierVal = verifierSelectVal;
+
+    // Table
+    doc.autoTable({
+        startY:45,
+        head:[['S.No','Particulars','Details']],
+        body:[
+            ['1','Name of the Business Firm/Employer',document.getElementById("biz_name").value],
+            ['2','Address of the Business Firm/Employer',document.getElementById("biz_address").value],
+            ['3','Ownership of Office/Shop/Factory',ownership],
+            ['4','Whether Name Board of Firm/Office sighted',document.getElementById("board_sighted").value],
+            ['5','If No, Comments thereof',document.getElementById("comments").value],
+            ['6','Designation (Owner/Partner/Employee)',designation],
+            ['7','If Employed, Since when & Employee No. / If Self-employed, Since when:',document.getElementById("year_est").value],
+            ['8','Type of Employer/Business Firm',bizType],
+            ['9','Date of Visit',visitDate],
+            ['10','Name of Verifier & Remarks',verifierVal+" | Notes: "+document.getElementById("remarks").value]
+        ],
+        styles:{fontSize:11,cellPadding:4,lineColor:[0,0,0],lineWidth:0.1},
+        headStyles:{fillColor:[44,62,80],textColor:[255,255,255],fontStyle:"bold"},
+        bodyStyles:{textColor:30},
+        alternateRowStyles:{fillColor:[245,245,245]}
+    });
+
+    // Reference Section
+    let finalY = doc.lastAutoTable.finalY + 15;
+    doc.setFont("times","bold"); doc.setFontSize(12);
+    doc.text("Reference Details:",14,finalY);
+    finalY += 8;
+    doc.setFont("times","normal");
+    doc.text("1. "+ref1Name+" - "+ref1Number,14,finalY);
+    finalY += 8;
+    doc.text("2. "+ref2Name+" - "+ref2Number,14,finalY);
+
+    // Footer
+    finalY += 15;
+    doc.setDrawColor(180); doc.line(10,finalY,200,finalY);
+    doc.setFontSize(9); doc.setTextColor(80);
+    doc.text("Confidential Report - Generated by Verification System",105,finalY+8,{align:"center"});
+
+    doc.save(applicantName.replace(/\s+/g,"_")+"_BOI_Employment.pdf");
+}
+</script>
+
+</body>
+</html>

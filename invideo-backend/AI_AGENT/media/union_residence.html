@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Residence Verification Form</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 10px;
+    padding: 0;
+  }
+  form {
+    max-width: 100%;
+  }
+  label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+  }
+  input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  small { display:block; margin-top:-6px; margin-bottom:8px; color:#333; }
+  button {
+    background-color: #2c3e50;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+  }
+  button:hover {
+    background-color: #1a242f;
+  }
+</style>
+
+<h2>Union Bank - Residence Verification Form</h2>
+<form id="resForm">
+    <label>Applicant Name:</label>
+    <input type="text" id="applicant_name">
+
+    <label>Present Residence Address:</label>
+    <input type="text" id="present_address">
+
+    <label>Applicant's Residence Landmark:</label>
+    <input type="text" id="landmark">
+
+    <label>Stay Confirmed:</label>
+    <select id="stay_confirmed">
+      <option selected>Yes</option>
+      <option>No</option>
+    </select>
+
+    <label>Staying Since:</label>
+    <input type="text" id="staying_since">
+
+    <label>Name Plate Seen?</label>
+    <select id="name_plate">
+      <option>Yes</option>
+      <option selected>No</option>
+    </select>
+
+    <label>Name on Plate Tally?</label>
+    <select id="plate_tally">
+      <option>Yes</option>
+      <option selected>No</option>
+    </select>
+
+    <label>Nature of Residence:</label>
+    <select id="nature_residence" onchange="toggleOtherNature()">
+      <option>Own House</option>
+      <option>Family Owned</option>
+      <option>Paying Guest (PG)</option>
+      <option>Company Quarters</option>
+      <option>Rental</option>
+      <option>Other</option>
+    </select>
+    <input type="text" id="other_nature" placeholder="Specify Nature" style="display:none; margin-top:5px;">
+
+    <label>Type of Residence:</label>
+    <select id="type_residence">
+      <option>Flat</option>
+      <option>Independent House</option>
+      <option>Multi-tenanted House</option>
+    </select>
+
+    <label>Name & Address of Person Contacted:</label>
+    <input type="text" id="person_contacted">
+
+    <label>Relation with Applicant:</label>
+    <select id="relation" onchange="toggleOtherRelation()">
+      <option>Self</option>
+      <option>Wife</option>
+      <option>Son</option>
+      <option>Father</option>
+      <option>Mother</option>
+      <option>Sister</option>
+      <option>Brother</option>
+      <option>Uncle</option>
+      <option>Neighbourhood</option>
+      <option>Tenanted</option>
+      <option>Other</option>
+    </select>
+    <input type="text" id="other_relation" placeholder="Specify Relation" style="display:none; margin-top:5px;">
+
+    <label>City:</label>
+    <select id="city" onchange="toggleOtherCity()">
+      <option selected>Delhi</option>
+      <option>Haryana</option>
+      <option>Ghaziabad</option>
+      <option>Uttar Pradesh</option>
+      <option>Other</option>
+    </select>
+    <input type="text" id="other_city" placeholder="Specify City" style="display:none; margin-top:5px;">
+
+    <label>Pincode:</label>
+    <input type="text" id="pincode">
+
+    <label>Residence Phone:</label>
+    <input type="text" id="res_phone">
+
+    <label>Mobile No.:</label>
+    <input type="text" id="mobile">
+
+    <label>Type of Locality:</label>
+    <select id="locality">
+      <option>Commercial</option>
+      <option selected>Residential</option>
+      <option>Security Area</option>
+    </select>
+
+    <label>Carpet Area (sq.ft.):</label>
+    <input type="text" id="carpet_area">
+
+    <label>Locality / Landmark (map ref.):</label>
+    <input type="text" id="map">
+
+    <label>Living Standard:</label>
+    <select id="living_standard">
+      <option>Low Class</option>
+      <option selected>Middle Class</option>
+      <option>Upper-Middle Class</option>
+      <option>High Class</option>
+    </select>
+
+    <label>Assets Seen:</label><br>
+    <input type="checkbox" id="tv"> TV
+    <input type="checkbox" id="ac"> AC
+    <input type="checkbox" id="ref"> Refrigerator
+    <br>
+    Other: <input type="text" id="other_asset" placeholder="Specify if any">
+
+    <label>Vehicle Details:</label><br>
+    Two Wheeler (Qty): <input type="number" id="two_wheeler" min="0" value="0">
+    Four Wheeler (Qty): <input type="number" id="four_wheeler" min="0" value="0">
+
+    <label>Permanent Address:</label>
+    <select id="permanent_address">
+      <option selected>Same as Present</option>
+      <option>Different</option>
+    </select>
+
+    <label>Married Status:</label>
+    <select id="married">
+      <option value="Married">Married</option>
+      <option value="Unmarried">Unmarried</option>
+    </select>
+    <input type="text" id="married_remark" placeholder="Remarks if Married">
+
+    <!-- Qualification Section: manual input (default) + optional dropdown -->
+    <label>Qualification:</label>
+    <input type="text" id="qualification" placeholder="Type qualification (e.g., MBA, B.Tech)">
+    <small>Or choose below (optional).</small>
+    <select id="qualification_select" onchange="applyQualificationSelect()">
+      <option value="">Select Qualification (optional)</option>
+      <option>Uneducated</option>
+      <option>10th</option>
+      <option>12th</option>
+      <option>Graduation</option>
+      <option>Post Graduation</option>
+      <option>PhD</option>
+      <option>Diploma</option>
+    </select>
+
+    <label>Number of Dependents:</label>
+    <input type="text" id="dependents">
+
+    <!-- Verifier Section: manual input (default) + optional dropdown -->
+    <label>Name of Verifier & Remarks:</label>
+    <input type="text" id="verifier_res" placeholder="Type Verifier Name">
+    <small>Or choose below (optional).</small>
+    <select id="verifier_select" onchange="applyVerifierSelect()">
+      <option value="">Select Verifier Name (optional)</option>
+      <option>Dheeraj</option>
+      <option>Sumit</option>
+      <option>Varun Michael</option>
+      <option>Pankaj Dixit</option>
+      <option>Rohit</option>
+      <option>Ravi</option>
+      <option>Sunil</option>
+      <option>Rakesh</option>
+      <option>Bittoo Rajput</option>
+      <option>Ajay Sharma</option>
+      <option>Badan Singh</option>
+      <option>Amit Kumar</option>      
+    </select>
+
+    <label>Additional Remarks / Notes:</label>
+    <textarea id="remarks" rows="4" cols="50"></textarea>
+
+    <button type="button" onclick="generatePDF()">Download UBI Residence Verification PDF</button>
+</form>
+
+<script>
+/* Toggle Other inputs */
+function toggleOtherNature() {
+  const select = document.getElementById("nature_residence");
+  const input = document.getElementById("other_nature");
+  input.style.display = (select.value === "Other") ? "block" : "none";
+}
+function toggleOtherRelation() {
+  const select = document.getElementById("relation");
+  const input = document.getElementById("other_relation");
+  input.style.display = (select.value === "Other") ? "block" : "none";
+}
+function toggleOtherCity() {
+  const select = document.getElementById("city");
+  const input = document.getElementById("other_city");
+  input.style.display = (select.value === "Other") ? "block" : "none";
+}
+
+/* Qualification/Verifier dropdown behavior:
+   - If the manual input is empty, dropdown selection fills the input.
+   - If the manual input already has text, dropdown selection won't overwrite it.
+*/
+function applyQualificationSelect() {
+  const select = document.getElementById("qualification_select");
+  const input = document.getElementById("qualification");
+  if (!input.value.trim() && select.value) {
+    input.value = select.value;
+  }
+}
+function applyVerifierSelect() {
+  const select = document.getElementById("verifier_select");
+  const input = document.getElementById("verifier_res");
+  if (!input.value.trim() && select.value) {
+    input.value = select.value;
+  }
+}
+
+/* Generate PDF using jsPDF + autotable */
+async function generatePDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  // HEADER
+  doc.setFillColor(44, 62, 80);
+  doc.rect(0, 0, 210, 25, "F");
+  doc.setTextColor(255, 255, 255);
+  doc.setFont("times", "bold");
+  doc.setFontSize(16);
+  doc.text("Samiksha Garg & Associates", 105, 12, { align: "center" });
+  doc.setFontSize(10);
+  doc.setFont("times", "normal");
+  doc.text("BS 4L, Malibu Town, Sector-47, Gurugram, HR-1220018", 205, 20, { align: "right" });
+  doc.setTextColor(0, 0, 0);
+
+  // Applicant Name on PDF header area
+  doc.setFont("times", "bold");
+  doc.setFontSize(12);
+  doc.text("Applicant Name: ", 14, 35);
+  doc.setFont("times", "normal");
+  const applicantName = document.getElementById("applicant_name").value || "";
+  doc.text(applicantName, 55, 35);
+
+  // Divider
+  doc.setLineWidth(0.3);
+  doc.line(10, 40, 200, 40);
+
+  // Assets
+  let assets = "";
+  if (document.getElementById("tv").checked) assets += "TV, ";
+  if (document.getElementById("ac").checked) assets += "AC, ";
+  if (document.getElementById("ref").checked) assets += "Refrigerator, ";
+  assets += document.getElementById("other_asset").value || "";
+  assets = assets.replace(/,\s*$/, "");
+
+  // Married
+  let marriedText = document.getElementById("married").value;
+  if (marriedText === "Married" && document.getElementById("married_remark").value.trim() !== "") {
+    marriedText += " (" + document.getElementById("married_remark").value + ")";
+  }
+
+  // Nature of Residence
+  let natureRes = document.getElementById("nature_residence").value;
+  if (natureRes === "Other") {
+    natureRes += " (" + document.getElementById("other_nature").value + ")";
+  }
+
+  // Relation with Applicant
+  let relationRes = document.getElementById("relation").value;
+  if (relationRes === "Other") {
+    relationRes += " (" + document.getElementById("other_relation").value + ")";
+  }
+
+  // City: prefer typed other_city if 'Other' selected
+  let cityVal = document.getElementById("city").value;
+  if (cityVal === "Other") {
+    cityVal = document.getElementById("other_city").value || "";
+  }
+
+  // Qualification: priority to manual input; otherwise use select
+  let qualificationVal = document.getElementById("qualification").value.trim();
+  const qualificationSelectVal = document.getElementById("qualification_select").value;
+  if (!qualificationVal && qualificationSelectVal) {
+    qualificationVal = qualificationSelectVal === "" ? "" : qualificationSelectVal;
+  }
+
+  // Verifier: priority to manual input; otherwise use select
+  let verifierVal = document.getElementById("verifier_res").value.trim();
+  const verifierSelectVal = document.getElementById("verifier_select").value;
+  if (!verifierVal && verifierSelectVal) {
+    verifierVal = verifierSelectVal === "" ? "" : verifierSelectVal;
+  }
+
+  // TABLE
+  doc.autoTable({
+    startY: 45,
+    theme: "grid",
+    head: [['Field', 'Details']],
+    body: [
+      ['Present Address', document.getElementById("present_address").value],
+      ['Residence Landmark', document.getElementById("landmark").value],
+      ['Stay Confirmed', document.getElementById("stay_confirmed").value],
+      ['Staying Since', document.getElementById("staying_since").value],
+      ['Name Plate Seen?', document.getElementById("name_plate").value],
+      ['Name on Plate Tally?', document.getElementById("plate_tally").value],
+      ['Nature of Residence', natureRes],
+      ['Type of Residence', document.getElementById("type_residence").value],
+      ['Person Contacted', document.getElementById("person_contacted").value],
+      ['Relation with Applicant', relationRes],
+      ['City', cityVal],
+      ['Pincode', document.getElementById("pincode").value],
+      ['Residence Phone', document.getElementById("res_phone").value],
+      ['Mobile No.', document.getElementById("mobile").value],
+      ['Type of Locality', document.getElementById("locality").value],
+      ['Carpet Area', document.getElementById("carpet_area").value],
+      ['Locality/Map Ref.', document.getElementById("map").value],
+      ['Living Standard', document.getElementById("living_standard").value],
+      ['Assets Seen', assets],
+      ['Vehicle Details', "Two Wheeler: " + document.getElementById("two_wheeler").value + 
+        ", Four Wheeler: " + document.getElementById("four_wheeler").value],
+      ['Permanent Address', document.getElementById("permanent_address").value],
+      ['Married Status', marriedText],
+      ['Qualification', qualificationVal],
+      ['Dependents', document.getElementById("dependents").value],
+      ['Verifier & Remarks', verifierVal],
+      ['Additional Remarks / Notes', document.getElementById("remarks").value]
+    ],
+    styles: { fontSize: 11, cellPadding: 4, lineColor: [0,0,0], lineWidth: 0.1 },
+    headStyles: { fillColor: [44,62,80], textColor: [255,255,255], fontStyle: "bold" },
+    bodyStyles: { textColor: 30 },
+    alternateRowStyles: { fillColor: [245,245,245] }
+  });
+
+  // FOOTER
+  let finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 15 : 200;
+  doc.setDrawColor(180);
+  doc.line(10, finalY, 200, finalY);
+  doc.setFontSize(9);
+  doc.setTextColor(80);
+  doc.text("Confidential Report - Generated by Verification System", 105, finalY + 8, { align: "center" });
+
+  // Filename: ApplicantName_Residence.pdf (spaces -> underscores)
+  let fileName = "Residence_Verification.pdf";
+  if (applicantName && applicantName.trim() !== "") {
+    const safeName = applicantName.trim().replace(/\s+/g, "_").replace(/[^a-zA-Z0-9_\-]/g, "");
+    fileName = safeName + "_UBI_Residence.pdf";
+  }
+  doc.save(fileName);
+}
+</script>
+</body>
+</html>

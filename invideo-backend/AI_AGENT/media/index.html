@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script type="module" src="ragister.js" defer></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Samiksha Garg & Associates | Chartered Accountants</title>
+  <meta name="description" content="Samiksha Garg & Associates — Chartered Accountants providing banking profile work, loan assistance, CIBIL score correction, financial advisory, tax & accounting in Delhi–NCR." />
+   
+  <style>
+    :root {
+      --primary: #0a3d91;
+      --primary-600: #07407c;
+      --accent: #1e88e5;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --bg: #ffffff;
+      --bg-soft: #f6f8fb;
+      --border: #e5e7eb;
+      --radius: 14px;
+      --shadow: 0 8px 20px rgba(2, 22, 58, 0.08);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color: var(--text); background: var(--bg); }
+
+    /* Top Header */
+    .top-header { border-bottom: 2px solid var(--primary); background: var(--bg); }
+    .top-wrap { max-width: 1200px; margin: 0 auto; padding: 18px 20px; display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: start; }
+    .addr { font-size: 13px; line-height: 1.5; color: var(--muted); }
+    .addr strong { display: block; color: var(--text); font-weight: 700; margin-bottom: 4px; }
+    .brand { text-align: center; }
+    .brand .logo { height: 60px; width: auto; display: inline-block; object-fit: contain; }
+    .brand h1 { margin: 6px 0 0; font-size: 22px; color: var(--primary); letter-spacing: 0.2px; }
+    .brand .subtitle { margin: 2px 0 0; font-size: 12px; color: var(--muted); letter-spacing: 1.2px; }
+
+    /* Nav */
+    .nav { position: sticky; top: 0; z-index: 40; background: var(--primary); color: #fff; box-shadow: var(--shadow); }
+    .nav-inner { max-width: 1200px; margin: 0 auto; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; }
+    .nav a { color: #fff; text-decoration: none; font-size: 15px; margin: 0 14px; opacity: 0.95; }
+    .nav a:hover { text-decoration: underline; }
+    .menu { display: flex; align-items: center; }
+    .hamburger { display: none; background: transparent; border: 0; color: #fff; font-size: 26px; line-height: 1; cursor: pointer; padding: 6px 10px; }
+
+    /* Mobile menu */
+    .mobile-panel { display: none; background: var(--primary); border-top: 1px solid rgba(255,255,255,0.15); }
+    .mobile-panel a { display: block; padding: 12px 20px; }
+
+    /* Sections */
+    section { padding: 64px 20px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-title { font-size: 28px; margin: 0 0 14px; color: var(--primary); }
+    .lead { color: var(--muted); font-size: 16px; margin: 0 0 24px; }
+
+    /* Hero / Intro */
+    .hero { background: linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%); border-bottom: 1px solid var(--border); }
+    .hero-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow); }
+    .hero-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; align-items: center; }
+    .hero h2 { font-size: 32px; margin: 0 0 10px; color: var(--text); }
+
+    /* About bullets */
+    .bullets { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 22px; margin-top: 10px; }
+    .bullet { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+    .bullet b { color: var(--primary); }
+
+    /* Services cards */
+    .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); transition: transform .15s ease, box-shadow .15s ease; }
+    .card h3 { margin: 8px 0 6px; color: var(--text); font-size: 18px; }
+    .card p { margin: 0 0 12px; color: var(--muted); font-size: 14px; }
+    .card .btn { display: inline-block; padding: 10px 14px; border-radius: 10px; background: var(--primary); color: #fff; text-decoration: none; font-size: 14px; }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(2,22,58,.12); }
+
+    /* Contact */
+    .contact { background: var(--bg-soft); border-top: 1px solid var(--border); }
+    form { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+    input, textarea, select { width: 100%; padding: 12px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 15px; }
+    textarea { min-height: 120px; resize: vertical; }
+    .submit { margin-top: 10px; padding: 12px 16px; background: var(--primary); color: #fff; border: 0; border-radius: 10px; cursor: pointer; font-size: 15px; }
+    .submit:hover { background: var(--primary-600); }
+
+    /* Download Section */
+.download-box{
+  max-height: 360px;
+  overflow-y: auto;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+}
+
+.download-item{
+  background:#fff;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:10px;
+}
+
+.download-actions a,
+.download-actions button{
+  font-size:12px;
+  padding:6px 10px;
+  border-radius:6px;
+  border:none;
+  cursor:pointer;
+  text-decoration:none;
+  color:#fff;
+}
+
+.btn-download{ background: var(--primary); }
+.btn-share{ background:#6b7280; }
+.btn-whatsapp{ background:#25D366; }
+.btn-edit{ background:#f59e0b; }
+
+    /* Footer */
+    footer { padding: 28px 20px; border-top: 1px solid var(--border); background: #fff; color: var(--muted); text-align: center; }
+
+    /* Modal */
+    #formModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:60; align-items:center; justify-content:center; padding:20px; }
+    #formModal > div { background:#fff; width:min(900px, 100%); max-height:90vh; overflow:auto; border-radius:16px; box-shadow: var(--shadow); }
+
+    @media (max-width: 1024px) {
+      .top-wrap { grid-template-columns: 1fr; text-align: center; }
+      .brand { order: -1; }
+      .addr { text-align: center; }
+      .address-sep { display: none; }
+    }
+    @media (max-width: 860px) {
+      .hamburger { display: inline-block; }
+      .menu { display: none; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .cards, .bullets, .grid-2 { grid-template-columns: 1fr; }
+      .brand .logo { height: 48px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="top-header" id="home">
+    <div class="top-wrap">
+      <div class="addr">
+        <strong>Branch</strong>
+        BS 4L, Malibu Town<br />
+        Sector-47, Gurugram, Haryana – 122018<br />
+        Mobile: 9711587575
+      </div>
+      <div class="brand">
+        <img class="logo" src="ca-logo.png" alt="CA India Logo" />
+        <h1>Samiksha Garg &amp; Associates</h1>
+        <p class="subtitle">CHARTERED ACCOUNTANTS</p>
+      </div>
+      <div class="addr" style="text-align:right">
+        <strong>Regd. Office</strong>
+        EPO-731, Emerald Plaza<br />
+        Sector-65, Gurugram – 122018<br />
+        M: 7840009810, 8287673151<br />
+        E-mail: <a href="mailto:casamikshagarg@gmail.com">casamikshagarg@gmail.com</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">☰</button>
+      <div class="menu" id="menu">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#downloads">Downloads</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div>
+        <a href="mailto:casamikshagarg@gmail.com" style="background:#ffffff20;padding:8px 12px;border-radius:10px;">Email Us</a>
+      </div>
+    </div>
+    <div class="mobile-panel" id="mobilePanel">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-card">
+        <h2>Trusted Financial &amp; Banking Solutions in Delhi–NCR</h2>
+        <p class="lead">We assist with public sector bank work, loans, CIBIL score correction, financial advisory, tax and compliance — with presence across Delhi, Gurugram and Jaipur.</p>
+        <div class="bullets">
+          <div class="bullet"><b>Banking Profile:</b> Work for public sector banks across the Delhi NCR region.</div>
+          <div class="bullet"><b>Loan Assistance:</b> Unsecured, home and car loans guidance.</div>
+          <div class="bullet"><b>Credit Score:</b> CIBIL score correction services.</div>
+          <div class="bullet"><b>Financial Advisory:</b> Funding assistance & financial specialist services.</div>
+          <div class="bullet"><b>Tax &amp; Accounting:</b> Accounting, tax audit and compliance consulting.</div>
+          <div class="bullet"><b>Coverage:</b> Delhi • Gurugram • Jaipur</div>
+        </div>
+      </div>
+      <div>
+        <img src="office-illustration.png" alt="Professional finance illustration" style="max-width:100%; border-radius: var(--radius); border:1px solid var(--border); box-shadow: var(--shadow);" />
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="container">
+      <h2 class="section-title">About Samiksha Garg &amp; Associates</h2>
+      <p class="lead">The company and its principal offer expertise across various financial and banking domains. We focus on reliable execution, transparent advisory and fast turnaround for individuals and businesses.</p>
+      <div class="bullets">
+        <div class="bullet"><b>Banking profile:</b> Work related to public sector banks across the Delhi NCR region.</div>
+        <div class="bullet"><b>Loan assistance:</b> Helps clients with unsecured loans, home loans, and car loans.</div>
+        <div class="bullet"><b>Credit score correction:</b> Provides CIBIL score correction services.</div>
+        <div class="bullet"><b>Financial advisory:</b> Financial service specialist and bank funding assistance.</div>
+        <div class="bullet"><b>Tax &amp; accounting:</b> Accounting services, tax auditing, and compliance consulting.</div>
+        <div class="bullet"><b>Presence:</b> Gurgaon &amp; Delhi offices; services extended to Jaipur.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services">
+    <div class="container">
+      <h2 class="section-title">Services &amp; Bank Forms</h2>
+      <p class="lead">Choose a bank form to proceed, or contact us for guidance.</p>
+      <div class="cards">
+        <div class="card">
+          <h3>Union Bank – Verification</h3>
+          <p>Open and fill the Union Bank verification form.</p>
+          <a class="btn" href="#" onclick="openForm('union')">Open Union Bank Form</a>
+        </div>
+        <div class="card">
+          <h3>Bank of India – Verification</h3>
+          <p>Open and fill the Bank of India verification form.</p>
+          <a class="btn" href="#" onclick="openForm('boi')">Open Bank of India Form</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal -->
+  <div id="formModal">
+    <div>
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--border);">
+        <strong id="formTitle">Form</strong>
+        <button onclick="closeForm()" style="background:transparent;border:0;font-size:22px;cursor:pointer">✕</button>
+      </div>
+      <div id="formBody" style="padding:16px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+          <button id="resBtn" style="padding:14px; border-radius:12px; border:1px solid var(--border); cursor:pointer; background:#f0f4f8;">Residence Verification</button>
+          <button id="empBtn" style="padding:14px; border-radius:12px; border:1px solid var(--border); cursor:pointer; background:#f0f4f8;">Employment/Business Verification</button>
+        </div>
+        <div id="formContainer">
+          <iframe id="formFrame" src="about:blank" style="width:100%; height:65vh; border:1px solid var(--border); border-radius:12px;"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Downloads Section -->
+<section id="downloads">
+  <div class="container">
+    <h2 class="section-title">My Generated Files</h2>
+    <p class="lead">Recently generated verification files</p>
+    <div class="download-box">
+      <div id="downloadList"></div>
+    </div>
+  </div>
+</section>
+  <!-- Contact -->
+  <section id="contact" class="contact">
+    <!-- Downloads Section -->
+<section id="downloads">
+  <div class="container">
+    <h2 class="section-title">My Generated Files</h2>
+    <p class="lead">Recently generated verification files</p>
+
+    <div class="download-box">
+      <div id="downloadList"></div>
+    </div>
+  </div>
+</section>
+    <div class="container">
+      <h2 class="section-title">Contact Us</h2>
+      <p class="lead">Email: <a href="mailto:casamikshagarg@gmail.com">casamikshagarg@gmail.com</a> &nbsp; | &nbsp; Phone: 7840009810, 8287673151</p>
+
+      <form id="contactForm" onsubmit="return handleContact(event)">
+        <div class="grid-2">
+          <div>
+            <label for="name">Name</label>
+            <input id="name" name="name" required />
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" type="email" name="email" required />
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" required></textarea>
+        </div>
+        <button class="submit" type="submit">Send Message</button>
+        <p id="contactNote" style="font-size:13px;color:var(--muted);margin-top:8px;">This demo uses your email client to send the message.</p>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    © <span id="year"></span> Samiksha Garg &amp; Associates — All Rights Reserved
+  </footer>
+
+<script>
+
+/* ============================= */
+/* MOBILE MENU */
+/* ============================= */
+const hamburger = document.getElementById('hamburger');
+const mobilePanel = document.getElementById('mobilePanel');
+
+hamburger.addEventListener('click', () => {
+  mobilePanel.style.display =
+    mobilePanel.style.display === 'block' ? 'none' : 'block';
+});
+
+/* ============================= */
+/* YEAR */
+/* ============================= */
+document.getElementById('year').textContent =
+  new Date().getFullYear();
+
+/* ============================= */
+/* CONTACT FORM */
+/* ============================= */
+function handleContact(e) {
+  e.preventDefault();
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const message = document.getElementById('message').value.trim();
+
+  const subject = encodeURIComponent(
+    'Website enquiry from ' + name
+  );
+  const body = encodeURIComponent(
+    'Name: ' + name +
+    '\nEmail: ' + email +
+    '\n\n' + message
+  );
+
+  window.location.href =
+    'mailto:casamikshagarg@gmail.com?subject=' +
+    subject + '&body=' + body;
+
+  return false;
+}
+
+/* ============================= */
+/* MODAL OPEN/CLOSE */
+/* ============================= */
+function openForm(bank) {
+
+  const title =
+    bank === 'union'
+      ? 'Union Bank Verification Form'
+      : 'Bank of India Verification Form';
+
+  document.getElementById('formTitle').textContent = title;
+  document.getElementById('formModal').style.display = 'flex';
+  document.getElementById('formFrame').src = 'about:blank';
+
+  document.getElementById('resBtn').onclick = function () {
+
+    const file =
+      bank === 'union'
+        ? 'union_residence.html'
+        : 'boi_residence.html';
+
+    document.getElementById('formFrame').src = file;
+
+    saveDownload(
+      file,
+      window.location.origin + "/" + file
+    );
+  };
+
+  document.getElementById('empBtn').onclick = function () {
+
+    const file =
+      bank === 'union'
+        ? 'union_employment.html'
+        : 'boi_employment.html';
+
+    document.getElementById('formFrame').src = file;
+
+    saveDownload(
+      file,
+      window.location.origin + "/" + file
+    );
+  };
+}
+
+function closeForm() {
+  document.getElementById('formModal').style.display = 'none';
+  document.getElementById('formFrame').src = 'about:blank';
+}
+
+/* ============================= */
+/* DOWNLOAD HISTORY SYSTEM */
+/* ============================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+  loadDownloads();
+});
+
+function saveDownload(fileName, fileURL) {
+
+  let downloads =
+    JSON.parse(localStorage.getItem("myDownloads")) || [];
+
+  downloads.unshift({
+    name: fileName,
+    url: fileURL,
+    date: new Date().toLocaleString()
+  });
+
+  localStorage.setItem(
+    "myDownloads",
+    JSON.stringify(downloads)
+  );
+
+  loadDownloads();
+}
+
+function loadDownloads() {
+
+  let downloads =
+    JSON.parse(localStorage.getItem("myDownloads")) || [];
+
+  let list =
+    document.getElementById("downloadList");
+
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  downloads.slice(0, 20).forEach((file) => {
+
+    let item = document.createElement("div");
+    item.className = "download-item";
+
+    item.innerHTML = `
+      <div>
+        <strong>${file.name}</strong><br>
+        <small>${file.date}</small>
+      </div>
+      <div class="download-actions">
+        <a href="${file.url}" target="_blank" class="btn-download">Open</a>
+        <button class="btn-edit" onclick="editFile('${file.url}')">Edit</button>
+        <button class="btn-share" onclick="shareFile('${file.url}')">Share</button>
+        <a class="btn-whatsapp" target="_blank"
+           href="https://wa.me/?text=${encodeURIComponent(file.url)}">WhatsApp</a>
+      </div>
+    `;
+
+    list.appendChild(item);
+  });
+}
+
+function editFile(url) {
+  document.getElementById('formModal').style.display = 'flex';
+  document.getElementById('formFrame').src = url;
+}
+
+function shareFile(url) {
+
+  if (navigator.share) {
+
+    navigator.share({
+      title: "Verification File",
+      url: url
+    });
+
+  } else {
+
+    alert("Sharing not supported on this device");
+
+  }
+}
+
+</script>
+</body>
+</html>

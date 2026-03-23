@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employment / Business Verification Form</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 10px;
+    padding: 0;
+  }
+  form {
+    max-width: 100%;
+  }
+  label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+  }
+  input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  button {
+    background-color: #2c3e50;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+  }
+  button:hover {
+    background-color: #1a242f;
+  }
+</style>
+
+<h2>Union Bank - Business/Employment Verification Form</h2>
+<form id="empForm">
+  <label>Applicant Name:</label>
+  <input type="text" id="applicant_name">
+
+  <label>Name of the Business Firm / Employer:</label>
+  <input type="text" id="business_name">
+
+  <label>Address of the Business Firm / Employer:</label>
+  <input type="text" id="business_address">
+
+  <label>Landmark / Locality (attach map):</label>
+  <input type="text" id="landmark">
+
+  <label>Ownership of Office / Shop / Factory:</label>
+  <select id="ownership">
+    <option>Owned</option>
+    <option selected>Rented</option>
+    <option>Leased</option>
+    <option>Company Premises</option>
+  </select>
+
+  <label>Name Board of Firm / Office Sighted?</label>
+  <select id="name_board">
+    <option>Yes</option>
+    <option selected>No</option>
+  </select>
+
+  <label>If No, Comments:</label>
+  <input type="text" id="board_comment">
+
+  <label>Type of Proof Received:</label>
+  <select id="proof" onchange="toggleProofInput()">
+    <option>GST Registration Certificate</option>
+    <option>Udyam Certificate</option>
+    <option>ID Card</option>
+    <option>Visiting Card</option>
+    <option>Certificate of Incorporation (for companies)</option>
+    <option>Import Export Code</option>
+    <option>Shop & Establishment Act License</option>
+    <option>FSSAI License (for food businesses)</option>
+    <option>Factory License (for manufacturing)</option>
+    <option>Trade License</option>
+    <option value="Other">Other</option>
+  </select>
+
+  <div id="otherProofDiv" style="display:none;">
+    <label>Please specify:</label>
+    <input type="text" id="other_proof">
+  </div>
+
+  <label>Designation (Owner / Partner / Employee):</label>
+  <input type="text" id="designation">
+
+  <label>If Business, Year of Establishment:</label>
+  <input type="text" id="est_year">
+
+  <label>Type of Employer / Business Firm:</label>
+  <select id="employer_type">
+    <option>Government</option>
+    <option>Public Sector</option>
+    <option selected>Private Company</option>
+    <option>Partnership</option>
+    <option>Proprietorship</option>
+    <option>Other</option>
+  </select>
+
+  <label>Nature of Business of Firm / Employer:</label>
+  <select id="business_nature">
+    <option>Manufacturing</option>
+    <option selected>Service</option>
+    <option>Trading</option>
+    <option>Other</option>
+  </select>
+
+  <label>Website / Email ID (if available):</label>
+  <input type="text" id="website">
+
+  <label>If Employed, Since when & Employee No. / If Self-employed, Since when:</label>
+  <input type="text" id="since_when">
+
+  <label>Any info on likelihood of change (transfer/resignation etc.):</label>
+  <input type="text" id="change_info">
+
+  <label>Line of Business (for self-employed):</label>
+  <input type="text" id="line_business">
+
+  <label>Telephone No. of Business Firm / Employer:</label>
+  <input type="text" id="phone">
+
+  <label>Terms of Employment:</label>
+  <input type="text" id="terms">
+
+  <label>Grade (Employees):</label>
+  <input type="text" id="grade">
+
+  <label>Name of Supervisory Official met (Designation / Mobile):</label>
+  <input type="text" id="supervisor">
+
+  <label>Visiting Card Obtained?</label>
+  <select id="visiting_card">
+    <option>Yes</option>
+    <option selected>No</option>
+  </select>
+
+  <!-- Verifier Section (manual + optional dropdown) -->
+  <label>Name of Verifier & Remarks:</label>
+  <input type="text" id="verifier_manual" placeholder="Type Verifier Name">
+  <small>Or choose below (optional):</small>
+  <select id="verifier_select" onchange="applyVerifierSelect()">
+    <option value="">Select Verifier Name (optional)</option>
+      <option>Dheeraj</option>
+      <option>Sumit</option>
+      <option>Varun Michael</option>
+      <option>Pankaj Dixit</option>
+      <option>Rohit</option>
+      <option>Ravi</option>
+      <option>Sunil</option>
+      <option>Rakesh</option>
+      <option>Bittoo Rajput</option>
+      <option>Ajay Sharma</option>
+      <option>Badan Singh</option>
+      <option>Amit Kumar</option>    
+  </select>
+
+  <label>Additional Remarks / Notes:</label>
+  <textarea id="remarks" rows="4" cols="50"></textarea>
+
+  <button type="button" onclick="generateEmpPDF()">Download UBI Business/Employment Verification PDF</button>
+</form>
+
+<script>
+  function toggleProofInput() {
+    const proofSelect = document.getElementById("proof");
+    const otherDiv = document.getElementById("otherProofDiv");
+    otherDiv.style.display = (proofSelect.value === "Other") ? "block" : "none";
+  }
+
+  function applyVerifierSelect() {
+    const manualInput = document.getElementById("verifier_manual");
+    const select = document.getElementById("verifier_select");
+    if (!manualInput.value.trim() && select.value) {
+      manualInput.value = select.value;
+    }
+  }
+
+  async function generateEmpPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // === HEADER ===
+    doc.setFillColor(44, 62, 80);
+    doc.rect(0, 0, 210, 25, "F");
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("times", "bold");
+    doc.setFontSize(16);
+    doc.text("Samiksha Garg & Associates", 105, 12, { align: "center" });
+    doc.setFontSize(10);
+    doc.setFont("times", "normal");
+    doc.text("BS 4L, Malibu Town, Sector-47, Gurugram, HR-1220018", 205, 20, { align: "right" });
+    doc.setTextColor(0, 0, 0);
+
+    // === Applicant Name ===
+    const applicantName = document.getElementById("applicant_name").value || "Applicant";
+    doc.setFont("times", "bold");
+    doc.setFontSize(12);
+    doc.text("Applicant Name:", 14, 35);
+    doc.setFont("times", "normal");
+    doc.text(applicantName, 55, 35);
+
+    doc.setLineWidth(0.3);
+    doc.line(10, 40, 200, 40);
+
+    let proofValue = document.getElementById("proof").value;
+    if (proofValue === "Other") {
+      proofValue = "Other (" + document.getElementById("other_proof").value + ")";
+    }
+
+    const verifierManual = document.getElementById("verifier_manual").value.trim();
+    const verifierSelect = document.getElementById("verifier_select").value;
+    const verifierValue = verifierManual || verifierSelect || "";
+
+    doc.autoTable({
+      startY: 45,
+      theme: "grid",
+      head: [['Field', 'Details']],
+      body: [
+        ['Name of the Business Firm / Employer', document.getElementById("business_name").value],
+        ['Address of the Business Firm / Employer', document.getElementById("business_address").value],
+        ['Landmark / Locality (attach map)', document.getElementById("landmark").value],
+        ['Ownership of Office / Shop / Factory', document.getElementById("ownership").value],
+        ['Name Board Sighted', document.getElementById("name_board").value],
+        ['If No, Comments', document.getElementById("board_comment").value],
+        ['Type of Proof Received', proofValue],
+        ['Designation', document.getElementById("designation").value],
+        ['Year of Establishment', document.getElementById("est_year").value],
+        ['Type of Employer / Business Firm', document.getElementById("employer_type").value],
+        ['Nature of Business', document.getElementById("business_nature").value],
+        ['Website / Email ID', document.getElementById("website").value],
+        ['Since When (Job/Business)', document.getElementById("since_when").value],
+        ['Likelihood of Change', document.getElementById("change_info").value],
+        ['Line of Business', document.getElementById("line_business").value],
+        ['Telephone No.', document.getElementById("phone").value],
+        ['Terms of Employment', document.getElementById("terms").value],
+        ['Grade (Employees)', document.getElementById("grade").value],
+        ['Supervisory Official Met', document.getElementById("supervisor").value],
+        ['Visiting Card Obtained', document.getElementById("visiting_card").value],
+        ['Verifier & Remarks', verifierValue],
+        ['Additional Remarks / Notes', document.getElementById("remarks").value]
+      ],
+      styles: { fontSize: 11, cellPadding: 4, lineColor: [0, 0, 0], lineWidth: 0.1 },
+      headStyles: { fillColor: [44, 62, 80], textColor: [255, 255, 255], fontStyle: "bold" },
+      bodyStyles: { textColor: 30 },
+      alternateRowStyles: { fillColor: [245, 245, 245] }
+    });
+
+    // === FOOTER ===
+    let finalY = doc.lastAutoTable.finalY + 15;
+    doc.setDrawColor(180);
+    doc.line(10, finalY, 200, finalY);
+    doc.setFontSize(9);
+    doc.setTextColor(80);
+    doc.text("Confidential Report - Generated by Verification System", 105, finalY + 8, { align: "center" });
+
+    // Save with applicant name
+    doc.save(`${applicantName}_UBI_Employment.pdf`);
+  }
+</script>
+</body>
+</html>
